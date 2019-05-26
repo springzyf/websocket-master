@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Spring Boot+WebSocket+Vue</title>
+
+    <script src="../static/lib/jquery-3.2.1.min.js"></script>
+    <script src="/lib/jquery-3.2.1.min.js"></script>
+
+
+
+
+
+    <script src="../static/lib/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="/lib/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+
+    <link href="../static/lib/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet"/>
+    <link href="/lib/bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet"/>
+
+    <script src="../static/lib/vue.js"></script>
+    <script src="/lib/vue.js"></script>
+
+
+</head>
+<body >
+<noscript><h2 style="color: #ff0000">貌似你的浏览器不支持websocket</h2></noscript>
+<div id="app">
+    <div class="btn">
+        <button class="bg-info" id="connect" v-on:click="connect()">{{isconnect}}</button>
+        <button class="bg-primary" id="disconnect" v-bind:onclick="disconnect()">断开连接</button>
+        <button class="bg-primary" v-on:click="sayAll()">广播</button>
+        <input v-model="alltext" type="text"/>
+    </div>
+
+    <div class="col-lg-6 form-control">当前用户: {{nowuser}}</div>
+    <div class="col-lg-6 form-control"> 当前在线人数: {{usernum}} </div>
+
+    <div>
+        <div><a v-bind:href="usernum"></a></div>
+
+           <!-- <ul class="nav nav-pills">
+                <li v-for="(item,index) in user" >{{index+1}}-&#45;&#45;{{item}}</li>
+            </ul>-->
+
+
+        <table class="table">
+            <thead><td>序号</td><td>姓名</td><td>登录时间</td></thead>
+            <tbody>
+                <tr v-for="(item,index) in user"><td>{{index+1}}</td><td>{{item.name}}</td><td>{{item.time}}</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+    <div id="jia">选择对话人员</div>
+    <div class="form-control">
+        <select v-model="nowchat">
+            <option v-for="item in user" v-bind:value="item.name">{{item.name}}</option>
+        </select>
+        <span>已选:{{nowchat}}</span>
+    </div>
+    </div>
+
+
+    <div>
+        <textarea type="text" v-model="chattext" v-show="false"></textarea>
+    </div>
+    <div class="container">
+        <div class="col-lg-2 modal-content">
+            <div v-for="(item,index) in user" class="clinkbu" v-on:click="changechatuser(item.name)">{{item.name}}</div>
+        </div>
+
+        <div class="panel panel-success taa col-lg-8">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                   与 {{nowchat}} 聊天记录
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                <table class="">
+                    <tr v-for="item in chatinfo">
+                        <td v-show="item.name == nowuser" class=""><span class="nowuser">{{item.name}}:</span> {{item.info}}</td>
+                        <td class="" v-show=" item.name != nowuser "><span class="elseuser">{{item.name}}</span>{{item.info}}</td></tr>
+                </table>
+
+            </div>
+
+        </div>
+        <div id="conversationDiv" class="col-lg-12">
+            <label>输入</label><input type="text" id="name" />
+            <button class="bg-success" id="sendName" v-on:click="sendName();">发送</button>
+        </div>
+
+    </div>
+
+
+
+</div>
+<style type="text/css">
+    .clinkbu:hover{
+        background-color: red;
+    }
+    .taa{
+        overflow:auto;
+        height: 400px;
+    }
+    .nowuser{
+        border-style: solid;
+        border-width: 1px;
+        color: #f0ad4e;
+        margin: 0 10px;
+    }
+    .elseuser{
+        border-style: solid;
+        border-width: 1px;
+        color: #2aabd2;
+
+    }
+</style>
+<script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/webcommit.js"></script>
+</body>
+</html>
